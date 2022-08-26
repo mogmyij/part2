@@ -1,11 +1,15 @@
-import { useState } from 'react'
+import { useState } from "react";
 
 const App = () => {
   const [persons, setPersons] = useState([
     { name: "Arto Hellas", number: "999222333" },
+    { name: "testing", number: "09097" },
+    { name: "bobby", number: "230423948" },
   ]);
   const [newName, setNewName] = useState("");
   const [newNumber, setNewNumber] = useState("");
+  const [searchQuery, setSearchQuery] = useState("");
+  const [personsToShow, setPersonsToShow] = useState(persons);
 
   const addPerson = (event) => {
     event.preventDefault();
@@ -21,8 +25,20 @@ const App = () => {
     setNewNumber("");
   };
 
+  const searchPerson = (event) => {
+    let matchedPersons = persons.filter((person) => {
+      const personUpperCase = person.name.toUpperCase();
+      const searchQueryUpperCase = event.target.value.toUpperCase();
+      return personUpperCase.includes(searchQueryUpperCase);
+    });
+    setPersonsToShow(matchedPersons);
+    setSearchQuery(event.target.value);
+  };
+
   return (
     <div>
+      <h2>Search Person</h2>
+      <input value={searchQuery} onChange={searchPerson} />
       <h2>Phonebook</h2>
       <form onSubmit={addPerson}>
         <div>
@@ -41,7 +57,7 @@ const App = () => {
       </form>
       <h2>Numbers</h2>
       <ul>
-        {persons.map((person) => (
+        {personsToShow.map((person) => (
           <li key={person.name}>
             {person.name} {person.number}
           </li>
