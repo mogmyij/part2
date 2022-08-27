@@ -1,6 +1,11 @@
 import { useState } from "react";
 
-const AddNumber = ({ persons, setPersons, setPersonsToShow }) => {
+const AddNumber = ({
+  persons,
+  setPersons,
+  setPersonsToShow,
+  personCounter,
+}) => {
   const [newName, setNewName] = useState("");
   const [newNumber, setNewNumber] = useState("");
 
@@ -12,7 +17,7 @@ const AddNumber = ({ persons, setPersons, setPersonsToShow }) => {
       setNewNumber("");
       return;
     }
-    let personObject = { name: newName, number: newNumber };
+    let personObject = { name: newName, number: newNumber, id: personCounter };
     setPersons(persons.concat(personObject));
     setNewName("");
     setNewNumber("");
