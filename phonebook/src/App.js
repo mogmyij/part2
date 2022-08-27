@@ -7,12 +7,11 @@ import AddNumber from "./components/AddNumber";
 const App = () => {
   const [persons, setPersons] = useState([]);
   const [personsToShow, setPersonsToShow] = useState(persons);
-  var personCounter = 0;
+  var personCounter = persons.length;
   useEffect(() => {
     axios.get("http://localhost:3001/persons").then((response) => {
       setPersons(response.data);
-      setPersonsToShow(persons);
-      personCounter = persons.length;
+      setPersonsToShow(response.data);
     });
   }, []);
 
