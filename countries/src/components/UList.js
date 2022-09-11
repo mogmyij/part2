@@ -1,9 +1,9 @@
-const UList = ({ array }) => {
+const UList = ({ array, keyArray }) => {
   return (
     <ul>
-      {array.map((value) => 
-        <li key={value}>{value}</li>
-      )}
+      {array.map((value,index) => (
+        <li key={keyArray[index]}>{value}</li>
+      ))}
     </ul>
   );
 };
