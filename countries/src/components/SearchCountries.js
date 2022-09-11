@@ -3,6 +3,7 @@ import { useState } from "react";
 const SearchCountries = ({ countries, setCountriesToShow }) => {
   const [searchInput, setSearchInput] = useState("");
 
+  //modifies the countriesToShow state with the contries that match the search results
   const searchCountry = (event) => {
     let searchedValue = event.target.value.toUpperCase();
     let searchResult = countries.filter((country) => {

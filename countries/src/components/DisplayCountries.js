@@ -1,6 +1,8 @@
 import UList from "./UList";
+import CountryInfo from "./CountryInfo";
 
 const DisplayCountries = ({ countriesToShow: countryArray }) => {
+  //if there are more than 10 countries to display, do not display them
   let moreThanTenCountries = countryArray.length > 10;
   let onlyOneCountry = countryArray.length === 1;
 
@@ -9,20 +11,14 @@ const DisplayCountries = ({ countriesToShow: countryArray }) => {
       {moreThanTenCountries && <p>Please refine your search</p>}
       {onlyOneCountry && (
         <div>
-          <h1>{countryArray[0].name.common}</h1>
-          <p>Region: {countryArray[0].region}</p>
-          <p>Capital: {countryArray[0].capital}</p>
-          <h2>Languages</h2>
-          <UList array={Object.values(countryArray[0].languages)} />
-          <img src={countryArray[0].flags.png} alt="country flag" />
+          <CountryInfo country={countryArray[0]} />
         </div>
       )}
+      {/*case where there is less than 10 but more than 1 country  */}
       {!moreThanTenCountries && !onlyOneCountry && (
-        <ul>
-          {countryArray.map((country) => (
-            <li key={country.name.common}>{country.name.common}</li>
-          ))}
-        </ul>
+        <div>
+          <UList array={countryArray.map(country=>country.name.common)}/>
+        </div>
       )}
     </>
   );
