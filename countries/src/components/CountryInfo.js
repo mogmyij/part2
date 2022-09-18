@@ -1,4 +1,5 @@
 import UList from "./UList";
+import DisplayWeather from "./DisplayWeather";
 
 const CountryInfo = ({ country }) => {
   return (
@@ -12,6 +13,7 @@ const CountryInfo = ({ country }) => {
         keyArray={Object.values(country.languages)}
       />
       <img src={country.flags.png} alt="country flag" />
+      <DisplayWeather latLong={country.latlng} countryName={country.name.common}/>
     </div>
   );
 };
