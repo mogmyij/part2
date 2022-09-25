@@ -1,27 +1,59 @@
 import { useState } from "react";
+import phoneBook from "../services/phoneBook";
 
 const AddNumber = ({
   persons,
   setPersons,
+  personsToShow,
   setPersonsToShow,
-  personCounter,
 }) => {
   const [newName, setNewName] = useState("");
   const [newNumber, setNewNumber] = useState("");
 
   const addPerson = (event) => {
     event.preventDefault();
-    if (persons.some((person) => person.name === newName)) {
-      alert("the person: " + newName + " has already been created");
+    let personObject = { name: newName, number: newNumber };
+    let duplicatePerson = persons.find((person) => {
+      return person.name === personObject.name;
+    });
+
+    if (duplicatePerson !== undefined) {
+      if (
+        !window.confirm(
+          `${duplicatePerson.name} already exists, replace their number instead?`
+        )
+      ) {
+        setNewName("");
+        setNewNumber("");
+        return;
+      }
+      phoneBook.editNumber(duplicatePerson.id, personObject).then((data) => {
+        var newPersonsArray = persons.map((person) => {
+          if (person.id === duplicatePerson.id) {
+            return { ...person, number: data.number };
+          }
+          return person;
+        });
+        var newPersonsToShowArray = personsToShow.map((person) => {
+          if (person.id === duplicatePerson.id) {
+            return { ...person, number: data.number };
+          }
+          return person;
+        });
+        setPersons(newPersonsArray);
+        setPersonsToShow(newPersonsToShowArray);
+      });
       setNewName("");
       setNewNumber("");
       return;
     }
-    let personObject = { name: newName, number: newNumber, id: personCounter };
-    setPersons(persons.concat(personObject));
+
+    phoneBook.addPerson(personObject).then((data) => {
+      setPersons(persons.concat(data));
+      setPersonsToShow(personsToShow.concat(data));
+    });
     setNewName("");
     setNewNumber("");
-    setPersonsToShow(persons.concat(personObject));
   };
 
   return (
