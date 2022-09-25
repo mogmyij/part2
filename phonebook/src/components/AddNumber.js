@@ -6,6 +6,8 @@ const AddNumber = ({
   setPersons,
   personsToShow,
   setPersonsToShow,
+  setErrorMessage,
+  setErrorCode,
 }) => {
   const [newName, setNewName] = useState("");
   const [newNumber, setNewNumber] = useState("");
@@ -27,31 +29,61 @@ const AddNumber = ({
         setNewNumber("");
         return;
       }
-      phoneBook.editNumber(duplicatePerson.id, personObject).then((data) => {
-        var newPersonsArray = persons.map((person) => {
-          if (person.id === duplicatePerson.id) {
-            return { ...person, number: data.number };
-          }
-          return person;
+      phoneBook
+        .editNumber(duplicatePerson.id, personObject)
+        .then((data) => {
+          var newPersonsArray = persons.map((person) => {
+            if (person.id === duplicatePerson.id) {
+              return { ...person, number: data.number };
+            }
+            return person;
+          });
+          var newPersonsToShowArray = personsToShow.map((person) => {
+            if (person.id === duplicatePerson.id) {
+              return { ...person, number: data.number };
+            }
+            return person;
+          });
+          setPersons(newPersonsArray);
+          setPersonsToShow(newPersonsToShowArray);
+          setErrorMessage("Successfully edited number");
+          setErrorCode(0);
+          setTimeout(() => {
+            setErrorMessage(null);
+          }, 5000);
+        })
+        .catch(() => {
+          setErrorMessage("Failed to edit number");
+          setErrorCode(1);
+          setTimeout(() => {
+            setErrorMessage(null);
+            setErrorCode(0);
+          }, 5000);
         });
-        var newPersonsToShowArray = personsToShow.map((person) => {
-          if (person.id === duplicatePerson.id) {
-            return { ...person, number: data.number };
-          }
-          return person;
-        });
-        setPersons(newPersonsArray);
-        setPersonsToShow(newPersonsToShowArray);
-      });
       setNewName("");
       setNewNumber("");
       return;
     }
 
-    phoneBook.addPerson(personObject).then((data) => {
-      setPersons(persons.concat(data));
-      setPersonsToShow(personsToShow.concat(data));
-    });
+    phoneBook
+      .addPerson(personObject)
+      .then((data) => {
+        setPersons(persons.concat(data));
+        setPersonsToShow(personsToShow.concat(data));
+        setErrorMessage("Successfully added contact");
+        setErrorCode(0);
+        setTimeout(() => {
+          setErrorMessage(null);
+        }, 5000);
+      })
+      .catch(() => {
+        setErrorMessage("Failed to add contact");
+        setErrorCode(1);
+        setTimeout(() => {
+          setErrorMessage(null);
+          setErrorCode(0);
+        }, 5000);
+      });
     setNewName("");
     setNewNumber("");
   };

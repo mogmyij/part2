@@ -5,8 +5,10 @@ const DisplayNumbers = ({
   setPersons,
   personsToShow,
   setPersonsToShow,
+  setErrorMessage,
+  setErrorCode,
 }) => {
-  personsToShow = personsToShow.map((person) => {
+  let newPersonsToShow = personsToShow.map((person) => {
     return (
       <>
         <p>
@@ -18,6 +20,8 @@ const DisplayNumbers = ({
           personsToShow={personsToShow}
           setPersonsToShow={setPersonsToShow}
           personId={person.id}
+          setErrorMessage={setErrorMessage}      
+          setErrorCode={setErrorCode}
         />
       </>
     );
@@ -25,8 +29,8 @@ const DisplayNumbers = ({
 
   return (
     <ul>
-      {personsToShow.map((person, index) => (
-        <li key={index}>{person}</li>
+      {newPersonsToShow.map((person, index) => (
+        <li key={personsToShow[index].id}>{person}</li>
       ))}
     </ul>
   );
